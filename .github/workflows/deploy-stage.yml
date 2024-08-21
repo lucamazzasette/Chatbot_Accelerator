@@ -29,6 +29,10 @@ jobs:
       - name: Install Bicep CLI
         run: az bicep install
 
+      - name: Create Resource Group
+        run: |
+          az group create --name PSLResourceGroupDraft --location eastus
+
       - name: Deploy Bicep Template
         run: |
           az deployment group create \
