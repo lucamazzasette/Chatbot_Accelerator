@@ -64,7 +64,7 @@ jobs:
         run: |
           az deployment group create \
             --resource-group PSLResourceGroupDraft \
-            --template-file ./test.bicep \
+            --template-file .github/workflows/test.bicep \
             --parameters vaultName=myTestKeyVault
 
       - name: Output Key Vault URI
