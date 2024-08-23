@@ -69,9 +69,9 @@ jobs:
 
       - name: Deploy Bicep Template
         run: |
-          az deployment group create \
+          az deployment sub create \
             --name automationDemo \
-            --resource-group PSLResourceGroupDraft \
+            --location easts \
             --template-file infra/main.bicep \
             --parameters environmentName=pslTestAuto location=eastus2
 
