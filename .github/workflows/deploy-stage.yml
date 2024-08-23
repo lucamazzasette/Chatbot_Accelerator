@@ -69,13 +69,24 @@ jobs:
 
       - name: Deploy Bicep Template
         run: |
+          set -o pipefail
+          OUTPUT=$(
           az deployment sub create \
-            --name automationDemo \
+            --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=pslTestAuto location=eastus2
+            --parameters environmentName=pslTestAuto2 location=eastus2) || {
 
-      - name: Output Key Vault URI
-        run: |
-          keyVaultUri=$(az deployment group show --resource-group PSLResourceGroupDraft --name myDraftDeploymentName --query "properties.outputs.vaultUri.value" -o tsv)
-          echo "Key Vault URI: $keyVaultUri"
+            echo "Deployment failed"
+            echo "$OUTPUT"
+            exit 1
+
+          }
+
+          echo "$OUTPUT"
+
+
+      # - name: Output Key Vault URI
+      #   run: |
+      #     keyVaultUri=$(az deployment group show --resource-group PSLResourceGroupDraft --name myDraftDeploymentName --query "properties.outputs.vaultUri.value" -o tsv)
+      #     echo "Key Vault URI: $keyVaultUri"
