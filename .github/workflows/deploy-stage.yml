@@ -71,7 +71,7 @@ jobs:
         run: |
           az deployment sub create \
             --name automationDemo \
-            --location easts \
+            --location eastus \
             --template-file infra/main.bicep \
             --parameters environmentName=pslTestAuto location=eastus2
 
