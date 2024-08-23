@@ -36,36 +36,44 @@ jobs:
       - name: Install Bicep CLI
         run: az bicep install
 
-      - name: Check and Create Resource Group
-        id: check_create_rg
-        run: |
-          set -e  # Exit on error
-          echo "Checking if resource group exists..."
-          rg_exists=$(az group exists --name PSLResourceGroupDraft)
-          if [ "$rg_exists" = "false" ]; then
-            echo "Resource group does not exist. Creating..."
-            az group create --name PSLResourceGroupDraft --location eastus > output.log 2>&1 || { echo "Error creating resource group:"; cat output.log; exit 1; }
-          else
-            echo "Resource group already exists."
-          fi
+      # - name: Check and Create Resource Group
+      #   id: check_create_rg
+      #   run: |
+      #     set -e  # Exit on error
+      #     echo "Checking if resource group exists..."
+      #     rg_exists=$(az group exists --name PSLResourceGroupDraft)
+      #     if [ "$rg_exists" = "false" ]; then
+      #       echo "Resource group does not exist. Creating..."
+      #       az group create --name PSLResourceGroupDraft --location eastus > output.log 2>&1 || { echo "Error creating resource group:"; cat output.log; exit 1; }
+      #     else
+      #       echo "Resource group already exists."
+      #     fi
 
-      - name: Verify Resource Group Creation
-        run: |
-          echo "Verifying resource group creation..."
-          rg_exists=$(az group exists --name PSLResourceGroupDraft)
-          if [ "$rg_exists" = "false" ]; then
-            echo "Error: Resource group creation failed."
-            exit 1
-          else
-            echo "Resource group verified successfully."
-          fi
+      # - name: Verify Resource Group Creation
+      #   run: |
+      #     echo "Verifying resource group creation..."
+      #     rg_exists=$(az group exists --name PSLResourceGroupDraft)
+      #     if [ "$rg_exists" = "false" ]; then
+      #       echo "Error: Resource group creation failed."
+      #       exit 1
+      #     else
+      #       echo "Resource group verified successfully."
+      #     fi
+
+      # - name: Deploy Bicep Template
+      #   run: |
+      #     az deployment group create \
+      #       --resource-group PSLResourceGroupDraft \
+      #       --template-file .github/workflows/test.bicep \
+      #       --parameters vaultName=myTestKeyVault2
 
       - name: Deploy Bicep Template
         run: |
           az deployment group create \
+            --name automationDemo \
             --resource-group PSLResourceGroupDraft \
-            --template-file .github/workflows/test.bicep \
-            --parameters vaultName=myTestKeyVault2
+            --template-file infra/main.bicep \
+            --parameters environmentName=pslTestAuto location=eastus2
 
       - name: Output Key Vault URI
         run: |
