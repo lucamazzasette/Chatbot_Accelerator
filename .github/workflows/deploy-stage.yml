@@ -45,14 +45,6 @@ jobs:
       - name: Install Bicep CLI
         run: az bicep install
 
-
-      # - name: Deploy Bicep Template
-      #   run: |
-      #     az deployment group create \
-      #       --resource-group PSLResourceGroupDraft \
-      #       --template-file .github/workflows/test.bicep \
-      #       --parameters vaultName=myTestKeyVault2
-
       - name: Deploy Bicep Template
         run: |
           # Debugging: Print input values
@@ -60,27 +52,8 @@ jobs:
           echo "Environment Name: ${{ github.event.inputs.environmentName }}"
           echo "Location: ${{ github.event.inputs.location }}"
 
-
-          set -o pipefail
-          OUTPUT=$(
           az deployment sub create \
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=${{ github.event.inputs.environmentName }} \
-            location=${{ github.event.inputs.location }} 2>&1)
-
-          # Capture the exit status of the command
-          EXIT_STATUS=$?
-
-          # Print the captured output for debugging
-          echo "Full output from deployment command:"
-          echo "$OUTPUT"
-
-          # Check if the command was successful
-          if [ $EXIT_STATUS -ne 0 ]; then
-            echo "Deployment failed with exit code $EXIT_STATUS"
-            exit 1
-          fi
-
-          echo "Deployment succeeded"
+            --parameters environmentName=${{ github.event.inputs.environmentName }} location=${{ github.event.inputs.location }}
