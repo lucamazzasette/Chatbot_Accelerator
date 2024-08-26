@@ -1,4 +1,4 @@
-name: Deploy Azure Resources-updated
+name: Deploy Azure Resources-Updated
 
 on:
   push:
