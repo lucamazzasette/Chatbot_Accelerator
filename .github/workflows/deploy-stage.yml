@@ -55,6 +55,12 @@ jobs:
 
       - name: Deploy Bicep Template
         run: |
+          # Debugging: Print input values
+          echo "Deploying with parameters:"
+          echo "Environment Name: ${{ github.event.inputs.environmentName }}"
+          echo "Location: ${{ github.event.inputs.location }}"
+
+          
           set -o pipefail
           OUTPUT=$(
           az deployment sub create \
