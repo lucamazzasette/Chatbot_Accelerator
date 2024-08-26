@@ -61,14 +61,20 @@ jobs:
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=${{ github.event.inputs.environmentName }} location=${{ github.event.inputs.location }} 2>&1)
+            --parameters environmentName=${{ github.event.inputs.environmentName }} \
+            location=${{ github.event.inputs.location }} 2>&1)
+
+          # Capture the exit status of the command
+          EXIT_STATUS=$?
+
+          # Print the captured output for debugging
+          echo "Full output from deployment command:"
+          echo "$OUTPUT"
 
           # Check if the command was successful
-          if [ $? -ne 0 ]; then
-            echo "Deployment failed"
-            echo "$OUTPUT"
+          if [ $EXIT_STATUS -ne 0 ]; then
+            echo "Deployment failed with exit code $EXIT_STATUS"
             exit 1
           fi
 
           echo "Deployment succeeded"
-          echo "$OUTPUT"
