@@ -48,7 +48,6 @@ jobs:
 
       - name: Deploy Bicep Template
         run: |
-          # Debugging: Print input values
           echo "Deploying with parameters:"
           echo "Environment Name: ${{ github.event.inputs.environmentName }}"
           echo "Location: ${{ github.event.inputs.location }}"
@@ -60,4 +59,4 @@ jobs:
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName="${{ github.event.inputs.environmentName }}" location="${{ github.event.inputs.location }}"
+            --parameters environmentName=${{ github.event.inputs.environmentName }} location=${{ github.event.inputs.location }}
