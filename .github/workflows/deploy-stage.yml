@@ -1,11 +1,20 @@
 
-name: Deploy Azure Resources
+name: Deploy Azure Resources-updated
 
 on:
   push:
     branches:
       - PSL-Automation-Flow-Draft
   workflow_dispatch:
+    inputs:
+      environmentName:
+        description: 'The name of the environment'
+        required: true
+        default: 'pslTestAuto2'
+      location:
+        description: 'The location for the deployment'
+        required: true
+        default: 'eastus2'
 
 
 jobs:
@@ -36,29 +45,6 @@ jobs:
       - name: Install Bicep CLI
         run: az bicep install
 
-      # - name: Check and Create Resource Group
-      #   id: check_create_rg
-      #   run: |
-      #     set -e  # Exit on error
-      #     echo "Checking if resource group exists..."
-      #     rg_exists=$(az group exists --name PSLResourceGroupDraft)
-      #     if [ "$rg_exists" = "false" ]; then
-      #       echo "Resource group does not exist. Creating..."
-      #       az group create --name PSLResourceGroupDraft --location eastus > output.log 2>&1 || { echo "Error creating resource group:"; cat output.log; exit 1; }
-      #     else
-      #       echo "Resource group already exists."
-      #     fi
-
-      # - name: Verify Resource Group Creation
-      #   run: |
-      #     echo "Verifying resource group creation..."
-      #     rg_exists=$(az group exists --name PSLResourceGroupDraft)
-      #     if [ "$rg_exists" = "false" ]; then
-      #       echo "Error: Resource group creation failed."
-      #       exit 1
-      #     else
-      #       echo "Resource group verified successfully."
-      #     fi
 
       # - name: Deploy Bicep Template
       #   run: |
@@ -75,18 +61,14 @@ jobs:
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=pslTestAuto2 location=eastus2) || {
+            --parameters environmentName=${{ github.event.inputs.environmentName }} location=${{ github.event.inputs.location }} 2>&1)
 
+          # Check if the command was successful
+          if [ $? -ne 0 ]; then
             echo "Deployment failed"
             echo "$OUTPUT"
             exit 1
+          fi
 
-          }
-
+          echo "Deployment succeeded"
           echo "$OUTPUT"
-
-
-      # - name: Output Key Vault URI
-      #   run: |
-      #     keyVaultUri=$(az deployment group show --resource-group PSLResourceGroupDraft --name myDraftDeploymentName --query "properties.outputs.vaultUri.value" -o tsv)
-      #     echo "Key Vault URI: $keyVaultUri"
