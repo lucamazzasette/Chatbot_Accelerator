@@ -10,11 +10,11 @@ on:
       environmentName:
         description: 'The name of the environment'
         required: true
-        default: 'pslTestAuto2'
+        default: "pslTestAuto2"
       location:
         description: 'The location for the deployment'
         required: true
-        default: 'eastus2'
+        default: "eastus2"
 
 
 jobs:
@@ -60,7 +60,7 @@ jobs:
           echo "Environment Name: ${{ github.event.inputs.environmentName }}"
           echo "Location: ${{ github.event.inputs.location }}"
 
-          
+
           set -o pipefail
           OUTPUT=$(
           az deployment sub create \
