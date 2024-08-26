@@ -48,7 +48,6 @@ jobs:
 
       - name: Deploy Bicep Template
         run: |
-          echo "Deploying with parameters:"
           echo "Environment Name: ${{ github.event.inputs.environmentName }}"
           echo "Location: ${{ github.event.inputs.location }}"
 
