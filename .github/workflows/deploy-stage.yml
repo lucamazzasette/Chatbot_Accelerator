@@ -51,9 +51,6 @@ jobs:
           echo "Environment Name: ${{ github.event.inputs.environmentName }}"
           echo "Location: ${{ github.event.inputs.location }}"
 
-          echo "ENVIRONMENT_NAME: ${{ github.event.inputs.environmentName || 'defaultEnvName' }}"
-          echo "LOCATION: ${{ github.event.inputs.location || 'defaultLocation' }}
-
           az deployment sub create \
             --name autoDemo \
             --location eastus \
