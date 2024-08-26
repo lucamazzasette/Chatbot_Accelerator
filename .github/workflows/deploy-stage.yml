@@ -4,7 +4,7 @@ name: Deploy Azure Resources-updated
 on:
   push:
     branches:
-      - PSL-Automation-Flow-Draft
+      - main
 
   workflow_dispatch:
     inputs:
