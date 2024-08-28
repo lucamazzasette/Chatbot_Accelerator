@@ -30,6 +30,6 @@ jobs:
       - name: Delete Bicep Deployment
         run: |
           az group delete \
-              --name rg-pslautomation \
-              --yes
+              --name PSLResourceGroupDraft2 \
               --no-wait
+              --yes
