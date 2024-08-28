@@ -3,7 +3,7 @@ name: CleanUp Resources
 on:
   push:
     branches:
-      - main
+      - PSL-Automation-Flow-Draft
   workflow_dispatch:
 
 jobs:
