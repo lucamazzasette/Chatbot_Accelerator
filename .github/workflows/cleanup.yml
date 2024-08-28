@@ -21,16 +21,14 @@ jobs:
 
       - name: Login to Azure
         run: |
-
           az login --service-principal -u ${{ secrets.AUTO_AZURE_CLIENT_ID }} -p ${{ secrets.AUTO_AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AUTO_AZURE_TENANT_ID }}
           az account set --subscription ${{ secrets.AUTO_AZURE_SUBSCRIPTION_ID }}
-          echo "TestAZURE_SUBSCRIPTION_ID=${{ secrets.AUTO_AZURE_SUBSCRIPTION_ID }}"
 
       - name: Install Bicep CLI
         run: az bicep install
 
       - name: Delete Bicep Deployment
         run: |
-          az deployment sub delete \
-            --name autoDemo \
-            --no-wait
+          az group delete \
+              --name pslautomation 
+              --no-wait
