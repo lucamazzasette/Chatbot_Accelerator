@@ -31,5 +31,5 @@ jobs:
         run: |
           az group delete \
               --name PSLResourceGroupDraft2 \
+              --yes \
               --no-wait
-              --yes
