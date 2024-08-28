@@ -53,4 +53,5 @@ jobs:
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=${{ github.event.inputs.environmentName }} location=${{ github.event.inputs.location }}
+            # --parameters environmentName=${{ github.event.inputs.environmentName }} location=${{ github.event.inputs.location }}
+            --parameters environmentName=pslautomation location=eastus2
