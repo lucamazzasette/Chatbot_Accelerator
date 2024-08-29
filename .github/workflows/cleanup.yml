@@ -8,6 +8,7 @@ on:
 
 jobs:
   az_cleanup:
+    if: ${{ vars.RUN_AZCLEANUP == 'true' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -30,6 +31,6 @@ jobs:
       - name: Delete Bicep Deployment
         run: |
           az group delete \
-              --name PSLResourceGroupDraft2 \
+              --name PSLResourceGroupDraft \
               --yes \
               --no-wait
