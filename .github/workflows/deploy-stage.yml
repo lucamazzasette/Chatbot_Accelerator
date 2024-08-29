@@ -28,8 +28,19 @@ jobs:
 
       - name: Deploy Bicep Template
         run: |
+          set -e
           az deployment sub create \
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation location=eastus2
+
+      - name: Send Success Email
+        if: ${{ success() }}
+        run: |
+          echo "Deployment succeeded" | mail -s "Azure Deployment Success" v-pmalusare@microsoft.com
+
+      - name: Send Failure Email
+        if: ${{ failure() }}
+        run: |
+          echo "Deployment failed" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
