@@ -26,6 +26,9 @@ jobs:
       - name: Install Bicep CLI
         run: az bicep install
 
+      - name: Install mailutils
+        run: sudo apt-get install -y mailutils
+
       - name: Deploy Bicep Template
         run: |
           set -e
@@ -34,9 +37,6 @@ jobs:
             --location eastus \
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation location=eastus2
-
-      - name: Install mailutils
-        run: sudo apt-get install -y mailutils
 
       - name: Send Success Email
         if: ${{ success() }}
