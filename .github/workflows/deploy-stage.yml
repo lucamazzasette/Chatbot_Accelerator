@@ -40,8 +40,8 @@ jobs:
 
       - name: Send Success Email
         if: ${{ success() }}
-        run: echo "Deployment succeeded" | mail -s "Azure Deployment Success" v-pmalusare@microsoft.com
+        run: echo "Deployment succeeded" | mail -s "Azure Deployment Success" v-singhprasa@microsoft.com
 
       - name: Send Failure Email
         if: ${{ failure() }}
-        run: echo "Deployment failed" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
+        run: echo "Deployment failed" | mail -s "Azure Deployment Failure" v-singhprasa@microsoft.com
