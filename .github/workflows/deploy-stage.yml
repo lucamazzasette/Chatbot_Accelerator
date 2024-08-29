@@ -26,8 +26,8 @@ jobs:
       - name: Install Bicep CLI
         run: az bicep install
 
-      - name: Install mailutils
-        run: sudo apt-get update && sudo apt-get install -y mailutils
+      - name: Install mailx
+        run: sudo apt-get update && sudo apt-get install -y mailx
 
       - name: Deploy Bicep Template
         run: |
@@ -38,13 +38,10 @@ jobs:
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation location=eastus2
 
-      - name: Install mailx
-        run: sudo apt-get update && sudo apt-get install -y mailx
-
       - name: Send Success Email
         if: ${{ success() }}
-        run: echo "Deployment succeeded" | mailx -s "Azure Deployment Success" your-email@example.com
+        run: echo "Deployment succeeded" | mailx -s "Azure Deployment Success" v-pmalusare@microsoft.com
 
       - name: Send Failure Email
         if: ${{ failure() }}
-        run: echo "Deployment failed" | mailx -s "Azure Deployment Failure" your-email@example.com
+        run: echo "Deployment failed" | mailx -s "Azure Deployment Failure" v-pmalusare@microsoft.com
