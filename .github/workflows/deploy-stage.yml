@@ -27,7 +27,7 @@ jobs:
         run: az bicep install
 
       - name: Install mailutils
-        run: sudo apt-get install -y mailutils
+        run: sudo apt-get update && sudo apt-get install -y mailutils
 
       - name: Deploy Bicep Template
         run: |
