@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  az-cleanup:
+  az_cleanup:
     runs-on: ubuntu-latest
 
     steps:
