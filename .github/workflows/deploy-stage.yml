@@ -26,8 +26,8 @@ jobs:
       - name: Install Bicep CLI
         run: az bicep install
 
-      - name: Install mail
-        run: sudo apt-get update && sudo apt-get install -y mail
+      - name: Install mailutils
+        run: sudo apt-get update && sudo apt-get install -y mailutils
 
       - name: Deploy Bicep Template
         run: |
