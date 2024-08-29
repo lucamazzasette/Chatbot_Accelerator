@@ -35,12 +35,13 @@ jobs:
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation location=eastus2
 
+      - name: Install mailutils
+        run: sudo apt-get install -y mailutils
+
       - name: Send Success Email
         if: ${{ success() }}
-        run: |
-          echo "Deployment succeeded" | mail -s "Azure Deployment Success" v-pmalusare@microsoft.com
+        run: echo "Deployment succeeded" | mail -s "Azure Deployment Success" v-pmalusare@microsoft.com
 
       - name: Send Failure Email
         if: ${{ failure() }}
-        run: |
-          echo "Deployment failed" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
+        run: echo "Deployment failed" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
