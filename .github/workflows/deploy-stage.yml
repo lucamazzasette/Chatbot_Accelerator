@@ -39,7 +39,7 @@ jobs:
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation location=eastus2)
 
-          echo "::set-output name=output::$output"
+          echo "output=$output" >> $GITHUB_ENV
 
       - name: Send Success Email
         if: ${{ success() }}
@@ -47,4 +47,6 @@ jobs:
 
       - name: Send Failure Email
         if: ${{ failure() }}
-        run: echo "CWYD Deployment failed ${{ steps.deploy.outputs.output }}" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
+        run:
+          output = ${{ env.output }}
+          echo "CWYD Deployment failed $output" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
