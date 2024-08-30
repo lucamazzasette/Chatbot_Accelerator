@@ -44,8 +44,8 @@ jobs:
           body: |
             {
               "title": "Deployment Failed",
-              "body": "Deployment TEST failed for branch ${{ github.ref }}. Please check the logs. @user1 @user2",
-              "assignees": ["Prashant-Microsoft", "user2"]
+              "body": "Deployment TEST failed for branch ${{ github.ref }}. Please check the logs. @v-pmalusare@microsoft.com",
+              "assignees": ["v-pmalusare@microsoft.com"]
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
