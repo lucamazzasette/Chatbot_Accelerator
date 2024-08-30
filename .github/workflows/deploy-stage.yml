@@ -33,20 +33,21 @@ jobs:
         id: deploy
         run: |
           set -e
+          error_file=$(mktemp)
           output=$(az deployment sub create \
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=pslautomation location=eastus2 2>&1)
+            --parameters environmentName=pslautomation location=eastus2 2> "$error_file")
 
-          echo "output=$output" >> $GITHUB_ENV
-
-      - name: Send Success Email
-        if: ${{ success() }}
-        run: echo "Deployment succeeded" | mail -s "Azure Deployment Success" v-pmalusare@microsoft.com
-
-      - name: Send Failure Email
-        if: ${{ failure() }}
+          echo "$output"
+      - name: Send Email
         run: |
-          output="${{ env.output }}"
-          echo "CWYD Deployment failed $output" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
+          status=${{ steps.deploy.outputs.status }}
+          output=${{ steps.deploy.outputs.output }}
+
+          if [ "$status" == "succeeded" ]; then
+            echo "Deployment succeeded. Details: $output" | mail -s "Azure Deployment Success" v-pmalusare@microsoft.com
+          else
+            echo "Deployment failed. Error details: $output" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
+          fi
