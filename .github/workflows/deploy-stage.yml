@@ -37,12 +37,8 @@ jobs:
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=pslautomation location=eastus2 \
+            --parameters environmentName=pslautomation location=eastus2
             -o json 2>&1)
-
-
-          # Print the raw output for debugging
-          echo "$output"
 
 
 
