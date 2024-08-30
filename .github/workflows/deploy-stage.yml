@@ -36,12 +36,12 @@ jobs:
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation location=eastus2
 
-      - name: Create Failure Issue
+      - name: Create Failure mail
         if: ${{ failure() }}
         uses: octokit/request-action@v2.x
         with:
-          route: POST /repos/${{ github.repository }}/issues
-          body: |
+          route: GET /repos/${{ github.repository }}/actions
+          mediaType: |
             {
               "title":"Deployment Failed",
               "body":"Deployment TEST failed for branch ${{ github.ref }}. Please check the logs. @v-pmalusare@microsoft.com",
