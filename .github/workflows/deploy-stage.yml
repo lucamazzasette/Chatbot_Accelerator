@@ -37,7 +37,15 @@ jobs:
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=pslautomation location=eastus2 2>&1)
+            --parameters environmentName=pslautomation location=eastus2)
+
+          if echo "$output" | grep -q '"error"'; then
+            echo "::set-output name=status::failed"
+          else
+            echo "::set-output name=status::succeeded"
+          fi
+
+          echo "::set-output name=output::$output"
 
 
 
