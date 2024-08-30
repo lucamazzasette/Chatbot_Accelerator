@@ -39,7 +39,7 @@ jobs:
             --location eastus \
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation location=eastus2 \
-            &> "$output_file"
+            &> "$output_file" || echo "Command failed, capturing output and error."
 
           output=$(cat "$output_file")
           echo "$output"
