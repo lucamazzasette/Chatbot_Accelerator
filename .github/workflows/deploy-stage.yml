@@ -47,4 +47,4 @@ jobs:
 
       - name: Send Failure Email
         if: ${{ failure() }}
-        run: echo "Deployment failed ${{ steps.deploy.outputs.output }}" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
+        run: echo "CWYD Deployment failed ${{ steps.deploy.outputs.output }}" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
