@@ -38,7 +38,7 @@ jobs:
             --location eastus \
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation location=eastus2 \
-            --query-string "{outputs: properties.outputs, error: properties.error}" 2>&1)
+            --query-string "{outputs: properties.outputs, error: properties.error}")
 
 
 
