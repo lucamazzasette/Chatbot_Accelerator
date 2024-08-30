@@ -37,7 +37,7 @@ jobs:
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=pslautomation location=eastus2)
+            --parameters environmentName=pslautomation location=eastus2 2>&1)
 
           echo "output=$output" >> $GITHUB_ENV
 
@@ -47,6 +47,6 @@ jobs:
 
       - name: Send Failure Email
         if: ${{ failure() }}
-        run:
-          output = ${{ env.output }}
+        run: |
+          output = "${{ env.output }}"
           echo "CWYD Deployment failed $output" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
