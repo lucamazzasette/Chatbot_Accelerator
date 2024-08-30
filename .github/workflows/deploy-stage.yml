@@ -26,34 +26,26 @@ jobs:
       - name: Install Bicep CLI
         run: az bicep install
 
-      - name: Install mailutils
-        run: sudo apt-get update && sudo apt-get install -y mailutils
-
       - name: Deploy Bicep Template
         id: deploy
         run: |
-          output_file=$(mktemp)
-
+          set -e
           az deployment sub create \
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=pslautomation location=eastus2 \
-            &> "$output_file" || echo "Command failed, capturing output and error."
+            --parameters environmentName=pslautomation location=eastus2
 
-          output=$(cat "$output_file")
-          echo "$output"
-
-          echo "output=$output" >> $GITHUB_ENV
-
-          rm "$output_file"
-
-      - name: Send Success Email
-        if: ${{ success() }}
-        run: echo "Deployment succeeded" | mail -s "Azure Deployment Success" v-pmalusare@microsoft.com
-
-      - name: Send Failure Email
+      - name: Create Failure Issue
         if: ${{ failure() }}
-        run: |
-          output="${{ env.output }}"
-          echo "CWYD Deployment failed: $output" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/${{ github.repository }}/issues
+          body: |
+            {
+              "title": "Deployment Failed",
+              "body": "Deployment TEST failed for branch ${{ github.ref }}. Please check the logs. @user1 @user2",
+              "assignees": ["Prashant-Microsoft", "user2"]
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
