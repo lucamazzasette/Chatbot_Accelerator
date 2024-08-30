@@ -38,8 +38,11 @@ jobs:
             --location eastus \
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation location=eastus2 \
-            --query-string "{outputs: properties.outputs, error: properties.error}" \
             -o json 2>&1)
+
+
+          # Print the raw output for debugging
+          echo "$output"
 
 
 
