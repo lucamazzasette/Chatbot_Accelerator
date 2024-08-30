@@ -39,23 +39,10 @@ jobs:
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation location=eastus2)
 
-          if echo "$output" | grep -q '"error"'; then
-            echo "::set-output name=status::failed"
-          else
-            echo "::set-output name=status::succeeded"
-          fi
+      - name: Send Success Email
+        if: ${{ success() }}
+        run: echo "Deployment succeeded" | mail -s "Azure Deployment Success" v-pmalusare@microsoft.com
 
-          echo "::set-output name=output::$output"
-
-
-
-      - name: Send Email
-        run: |
-          status=${{ steps.deploy.outputs.status }}
-          output=${{ steps.deploy.outputs.output }}
-
-          if [ "$status" == "succeeded" ]; then
-            echo "Deployment succeeded. Details: $output" | mail -s "Azure Deployment Success" v-pmalusare@microsoft.com
-          else
-            echo "Deployment failed. Error details: $output" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
-          fi
+      - name: Send Failure Email
+        if: ${{ failure() }}
+        run: echo "Deployment failed ${{ steps.deploy.outputs.output }}" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
