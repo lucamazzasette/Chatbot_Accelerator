@@ -30,18 +30,31 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y mailutils
 
       - name: Deploy Bicep Template
+        id: deploy
         run: |
           set -e
-          az deployment sub create \
+          output=$(az deployment sub create \
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=pslautomation location=eastus2
+            --parameters environmentName=pslautomation location=eastus2 \
+            --query "{outputs: properties.outputs, error: properties.error}" -o json 2>&1)
 
-      - name: Send Success Email
-        if: ${{ success() }}
-        run: echo "Deployment succeeded" | mail -s "Azure Deployment Success" v-singhprasa@microsoft.com
+          if echo "$output" | grep -q '"error"'; then
+            echo "::set-output name=status::failed"
+          else
+            echo "::set-output name=status::succeeded"
+          fi
 
-      - name: Send Failure Email
-        if: ${{ failure() }}
-        run: echo "Deployment failed" | mail -s "Azure Deployment Failure" v-singhprasa@microsoft.com
+          echo "::set-output name=output::$output"
+
+      - name: Send Email
+        run: |
+          status=${{ steps.deploy.outputs.status }}
+          output=${{ steps.deploy.outputs.output }}
+
+          if [ "$status" == "succeeded" ]; then
+            echo "Deployment succeeded. Details: $output" | mail -s "Azure Deployment Success" v-pmalusare@microsoft.com
+          else
+            echo "Deployment failed. Error details: $output" | mail -s "Azure Deployment Failure" v-pmalusare@microsoft.com
+          fi
