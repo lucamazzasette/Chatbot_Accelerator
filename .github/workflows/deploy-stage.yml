@@ -36,16 +36,28 @@ jobs:
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation location=eastus2
 
-      - name: Create Failure mail
-        if: ${{ failure() }}
-        uses: octokit/request-action@v2.x
+      - name: Send Notification on Success
+        if: success()
+        uses: dawidd6/action-send-mail@v3
         with:
-          route: GET /repos/${{ github.repository }}/actions
-          mediaType: |
-            {
-              "title":"Deployment Failed",
-              "body":"Deployment TEST failed for branch ${{ github.ref }}. Please check the logs. @v-pmalusare@microsoft.com",
-              "assignees":["v-pmalusare@microsoft.com"]
-            }
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          server_address: smtp.example.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Deployment Success"
+          body: "The deployment succeeded."
+          to: v-pmalusare@microsoft.com
+          from: ${{ secrets.EMAIL_USERNAME }}
+
+      - name: Send Notification on Failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.example.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Deployment Failure"
+          body: "The deployment failed(cwyd)."
+          to: v-pmalusare@microsoft.com
+          from: ${{ secrets.EMAIL_USERNAME }}
