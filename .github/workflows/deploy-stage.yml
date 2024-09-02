@@ -36,29 +36,36 @@ jobs:
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation location=eastus2
 
-      - name: Send Notification on Success
-        if: success()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "Deployment Success"
-          body: "The deployment succeeded."
-          to: v-pmalusare@microsoft.com
-          from: ${{ secrets.EMAIL_USERNAME }}
+      - name: Get Access Token
+        id: get_token
+        run: |
+          response=$(curl -X POST \
+            https://login.microsoftonline.com/${{ secrets.AUTO_AZURE_TENANT_ID }}/oauth2/v2.0/token \
+            -d "grant_type=client_credentials" \
+            -d "client_id=${{ secrets.AUTO_AZURE_CLIENT_ID }}" \
+            -d "client_secret=${{ secrets.AUTO_AZURE_CLIENT_SECRET }}" \
+            -d "scope=https://graph.microsoft.com/.default")
+          echo "ACCESS_TOKEN=$(echo $response | jq -r .access_token)" >> $GITHUB_ENV
 
       - name: Send Notification on Failure
         if: failure()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.office365.com
-          server_port: 587
-          secure: false
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "Deployment Failure"
-          body: "The deployment failed(cwyd)."
-          to: v-pmalusare@microsoft.com
-          from: ${{ secrets.EMAIL_USERNAME }}
+        run: |
+          curl -X POST https://graph.microsoft.com/v1.0/me/sendMail \
+            -H "Authorization: Bearer ${{ env.ACCESS_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "message": {
+                "subject": "Deployment Failure!!",
+                "body": {
+                  "contentType": "Text",
+                  "content": "The deployment failed(cwyd)."
+                },
+                "toRecipients": [
+                  {
+                    "emailAddress": {
+                      "address": "v-pmalusare@microsoft.com"
+                    }
+                  }
+                ]
+              }
+            }'
