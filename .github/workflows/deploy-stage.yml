@@ -26,16 +26,6 @@ jobs:
       - name: Install Bicep CLI
         run: az bicep install
 
-      - name: Deploy Bicep Template
-        id: deploy
-        run: |
-          set -e
-          az deployment sub create \
-            --name autoDemo \
-            --location eastus \
-            --template-file infra/main.bicep \
-            --parameters environmentName=pslautomation location=eastus2
-
       - name: Get Access Token
         id: get_token
         run: |
@@ -50,5 +40,38 @@ jobs:
 
       - name: Debug Access Token
         run: echo "ACCESS_TOKEN=${{ env.ACCESS_TOKEN }}
+        
+      - name: Deploy Bicep Template
+        id: deploy
+        run: |
+          set -e
+          az deployment sub create \
+            --name autoDemo \
+            --location eastus \
+            --template-file infra/main.bicep \
+            --parameters environmentName=pslautomation location=eastus2
 
-      
+
+
+      - name: Send Notification on Failure
+        if: failure()
+        run: |
+          curl -X POST https://graph.microsoft.com/v1.0/me/sendMail \
+            -H "Authorization: Bearer ${{ env.ACCESS_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "message": {
+                "subject": "Deployment Failure!!",
+                "body": {
+                  "contentType": "Text",
+                  "content": "The deployment failed(cwyd)."
+                },
+                "toRecipients": [
+                  {
+                    "emailAddress": {
+                      "address": "v-pmalusare@microsoft.com"
+                    }
+                  }
+                ]
+              }
+            }'
