@@ -55,7 +55,7 @@ jobs:
       - name: Send Notification on Failure
         if: failure()
         run: |
-          curl -X POST https://graph.microsoft.com/v1.0/me/sendMail \
+          curl -X POST https://graph.microsoft.com/v1.0/users/v-pmalusare@microsoft.com/sendMail \
             -H "Authorization: Bearer ${{ env.ACCESS_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
