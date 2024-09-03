@@ -39,8 +39,8 @@ jobs:
           echo "ACCESS_TOKEN=$(echo $response | jq -r .access_token)" >> $GITHUB_ENV
 
       - name: Debug Access Token
-        run: echo "ACCESS_TOKEN=${{ env.ACCESS_TOKEN }}
-        
+        run: echo "ACCESS_TOKEN=${{ env.ACCESS_TOKEN }}"
+
       - name: Deploy Bicep Template
         id: deploy
         run: |
