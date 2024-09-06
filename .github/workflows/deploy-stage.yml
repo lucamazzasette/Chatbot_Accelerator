@@ -45,34 +45,52 @@ jobs:
         id: deploy
         run: |
           set -e
-          # Execute the deployment and capture both output and errors
-          output=$(az deployment sub create \
+
+          # Temporary files for capturing output and errors
+          output_file=$(mktemp)
+          error_file=$(mktemp)
+
+           # Execute the deployment and redirect output and errors
+          az deployment sub create \
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation2 location=eastus2 \
-            # --query "{status:properties.provisioningState, error:properties.error.message}" \
-            2>&1)
+            > "$output_file" 2> "$error_file"
 
-          # Capture the exit status
+          # Check the exit status
           exit_code=$?
+
+          # Capture output and errors
+          output=$(cat "$output_file")
+          error=$(cat "$error_file")
+
+          # Clean up temporary files
+          rm "$output_file" "$error_file"
 
           # Custom message to print
           custom_message="Deployment status is:"
 
           # Print the custom message and raw output
-          echo "$custom_message $output"
+          echo "$custom_message $output
 
-          # Check if the command was successful
+          # Handle errors
           if [ $exit_code -ne 0 ]; then
-            # Extract error details from output
-            error_message=$(echo "$output" | grep -oP '(?<=ERROR: ).*' || echo "$output")
+            # Extract and print error details
+            error_message=$(echo "$error" | jq -r '.error.message // "No detailed error message provided"')
 
             echo "Deployment failed with the following error:"
             echo "$error_message"
             exit 1
           else
-            echo "Deployment succeeded."
+            # Check for typical success indicators in output
+            if echo "$output" | grep -q 'Provisioning state: Succeeded'; then
+              echo "Deployment succeeded."
+            else
+              echo "Deployment output indicates a problem, but no explicit error was detected."
+              echo "$output"
+              exit 1
+            fi
           fi
 
 
