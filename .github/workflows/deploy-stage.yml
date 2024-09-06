@@ -51,7 +51,7 @@ jobs:
             --location eastus \
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation2 location=eastus2 \
-            --query "{status:properties.provisioningState, error:properties.error.message}" \
+            # --query "{status:properties.provisioningState, error:properties.error.message}" \
             --output json 2>&1)
 
           # Check if the command was successful
