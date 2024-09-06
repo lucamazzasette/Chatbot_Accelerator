@@ -46,7 +46,7 @@ jobs:
         run: |
           set -e
           # Execute the deployment and capture both output and errors
-          result=$(az deployment sub create \
+          output=$(az deployment sub create \
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
@@ -57,11 +57,11 @@ jobs:
           # Check if the command was successful
           if [ $? -ne 0 ]; then
             echo "Deployment failed with the following error:"
-            echo "$result"
+            echo "$output"
             exit 1
           else
             echo "Deployment succeeded."
-            echo "$result"
+            echo "$output"
           fi
 
 
