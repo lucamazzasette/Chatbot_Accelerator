@@ -45,11 +45,24 @@ jobs:
         id: deploy
         run: |
           set -e
-          az deployment sub create \
+
+          # Execute the deployment and capture the output and error
+          output=$(az deployment sub create \
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=pslautomation location=eastus2
+            --parameters environmentName=pslautomation location=eastus2 2>&1)
+
+          # Check if the command was successful
+          if [ $? -ne 0 ]; then
+            echo "Deployment failed with the following error:"
+            echo "$output"
+            exit 1
+          else
+            echo "Deployment succeeded."
+            echo "$output"
+          fi
+
 
       - name: Send Notification on Failure
         if: failure()
