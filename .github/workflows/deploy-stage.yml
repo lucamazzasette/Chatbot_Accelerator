@@ -57,8 +57,11 @@ jobs:
           # Capture the exit status
           exit_code=$?
 
-          # Print the raw output
-          echo "$output"
+          # Custom message to print
+          custom_message="Deployment status is:"
+
+          # Print the custom message and raw output
+          echo "$custom_message $output"
 
           # Check if the command was successful
           if [ $exit_code -ne 0 ]; then
