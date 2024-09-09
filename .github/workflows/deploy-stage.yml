@@ -62,7 +62,7 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{
               "message": {
-                "subject": "Deployment Failure!!",
+                "subject": "Deployment Failure!!!",
                 "body": {
                   "contentType": "Text",
                   "content": "The deployment failed(cwyd)."
