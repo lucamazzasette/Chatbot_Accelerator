@@ -46,52 +46,12 @@ jobs:
         run: |
           set -e
 
-          # Temporary files for capturing output and errors
-          output_file=$(mktemp)
-          error_file=$(mktemp)
-
            # Execute the deployment and redirect output and errors
           az deployment sub create \
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=pslautomation2 location=eastus2 \
-            > "$output_file" 2> "$error_file" || true
-
-          # Check the exit status
-          exit_code=$?
-
-          # Capture output and errors
-          output=$(cat "$output_file")
-          error=$(cat "$error_file")
-
-          # Clean up temporary files
-          rm "$output_file" "$error_file"
-
-          # Custom message to print
-          custom_message="Deployment status is:"
-
-          # Print the custom message and raw output
-          echo "$custom_message $output
-
-          # Handle errors
-          if [ $exit_code -ne 0 ]; then
-            # Extract and print error details
-            error_message=$(echo "$error" | jq -r '.error.message // "No detailed error message provided"')
-
-            echo "Deployment failed with the following error:"
-            echo "$error_message"
-            exit 1
-          else
-            # Check for typical success indicators in output
-            if echo "$output" | grep -q 'Provisioning state: Succeeded'; then
-              echo "Deployment succeeded."
-            else
-              echo "Deployment output indicates a problem, but no explicit error was detected."
-              echo "$output"
-              exit 1
-            fi
-          fi
+            --parameters environmentName=pslautomation2 location=eastus2
 
 
       - name: Send Notification on Failure
