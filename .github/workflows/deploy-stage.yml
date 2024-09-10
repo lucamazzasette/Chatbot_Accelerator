@@ -58,6 +58,7 @@ jobs:
         run: |
           curl -X POST ${{ secrets.AUTO_LOGIC_APP_URL }} \
             -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.AUTO_LOGIC_TOKEN }}" \
             -d '{
               "failureMessage": "The deployment failed(cwyd)."
             }'
