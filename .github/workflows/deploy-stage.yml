@@ -26,20 +26,20 @@ jobs:
       - name: Install Bicep CLI
         run: az bicep install
 
-      # - name: Get Access Token
-      #   id: get_token
-      #   run: |
-      #     response=$(curl -X POST \
-      #       https://login.microsoftonline.com/${{ secrets.AUTO_AZURE_TENANT_ID }}/oauth2/v2.0/token \
-      #       -d "grant_type=client_credentials" \
-      #       -d "client_id=${{ secrets.AUTO_AZURE_CLIENT_ID }}" \
-      #       -d "client_secret=${{ secrets.AUTO_AZURE_CLIENT_SECRET }}" \
-      #       -d "scope=https://graph.microsoft.com/.default")
-      #     echo "Response: $response"
-      #     echo "ACCESS_TOKEN=$(echo $response | jq -r .access_token)" >> $GITHUB_ENV
+      - name: Get Access Token
+        id: get_token
+        run: |
+          response=$(curl -X POST \
+            https://login.microsoftonline.com/${{ secrets.AUTO_AZURE_TENANT_ID }}/oauth2/v2.0/token \
+            -d "grant_type=client_credentials" \
+            -d "client_id=${{ secrets.AUTO_AZURE_CLIENT_ID }}" \
+            -d "client_secret=${{ secrets.AUTO_AZURE_CLIENT_SECRET }}" \
+            -d "scope=https://graph.microsoft.com/.default")
+          echo "Response: $response"
+          echo "ACCESS_TOKEN=$(echo $response | jq -r .access_token)" >> $GITHUB_ENV
 
-      # - name: Debug Access Token
-      #   run: echo "ACCESS_TOKEN=${{ env.ACCESS_TOKEN }}"
+      - name: Debug Access Token
+        run: echo "ACCESS_TOKEN=${{ env.ACCESS_TOKEN }}"
 
       - name: Deploy Bicep Template
         id: deploy
@@ -53,35 +53,35 @@ jobs:
             --template-file infra/main.bicep \
             --parameters environmentName=pslautomation2 location=eastus2
 
-      - name: Send Notification on Failure
-        if: failure()
-        run: |
-          curl -X POST "${{ secrets.AUTO_LOGIC_APP_URL }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "failureMessage": "The deployment failed(cwyd)."
-            }'
-
-
       # - name: Send Notification on Failure
       #   if: failure()
       #   run: |
-      #     curl -X POST https://graph.microsoft.com/v1.0/users/v-pmalusare@MngEnvMCAP993385.onmicrosoft.com/sendMail \
-      #       -H "Authorization: Bearer ${{ env.ACCESS_TOKEN }}" \
+      #     curl -X POST "${{ secrets.AUTO_LOGIC_APP_URL }}" \
       #       -H "Content-Type: application/json" \
       #       -d '{
-      #         "message": {
-      #           "subject": "Deployment Failure!!!",
-      #           "body": {
-      #             "contentType": "Text",
-      #             "content": "The deployment failed(cwyd)."
-      #           },
-      #           "toRecipients": [
-      #             {
-      #               "emailAddress": {
-      #                 "address": "v-kupavan@mngenvmcap993385.onmicrosoft.com"
-      #               }
-      #             }
-      #           ]
-      #         }
+      #         "failureMessage": "The deployment failed(cwyd)."
       #       }'
+
+
+      - name: Send Notification on Failure
+        if: failure()
+        run: |
+          curl -X POST "https://graph.microsoft.com/v1.0/users/v-pmalusare@MngEnvMCAP993385.onmicrosoft.com/sendMail" \
+            -H "Authorization: Bearer ${{ env.ACCESS_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "message": {
+                "subject": "Deployment Failure!!!",
+                "body": {
+                  "contentType": "Text",
+                  "content": "The deployment failed(cwyd)."
+                },
+                "toRecipients": [
+                  {
+                    "emailAddress": {
+                      "address": "v-pmalusare@MngEnvMCAP993385.onmicrosoft.com"
+                    }
+                  }
+                ]
+              }
+            }'
