@@ -56,24 +56,16 @@ jobs:
       - name: Send Notification on Failure
         if: failure()
         run: |
+          # Define custom failure message
+          FAILURE_MESSAGE="The deployment failed. Please check the logs for more details."
+
+          # Construct JSON payload with the custom message
+          JSON_PAYLOAD=$(printf '{"failureMessage": "%s"}' "$FAILURE_MESSAGE")
+
           curl -X POST "${{ secrets.AUTO_LOGIC_APP_URL }}" \
             -H "Content-Type: application/json" \
-            -d '{
-              "message": {
-                "subject": "Deployment Failure!!!",
-                "body": {
-                  "contentType": "Text",
-                  "content": "The deployment failed(cwyd)."
-                },
-                "toRecipients": [
-                  {
-                    "emailAddress": {
-                      "address": "v-pmalusare@MngEnvMCAP993385.onmicrosoft.com"
-                    }
-                  }
-                ]
-              }
-            }'
+            -d "$JSON_PAYLOAD"
+
 
 
       # - name: Send Notification on Failure
