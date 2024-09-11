@@ -56,16 +56,9 @@ jobs:
       - name: Send Notification on Failure
         if: failure()
         run: |
-          # Define custom failure message
-          FAILURE_MESSAGE="The deployment failed. Please check the logs for more details."
-
-          # Construct JSON payload with the custom message
-          JSON_PAYLOAD=$(printf '{"failureMessage": "%s"}' "$FAILURE_MESSAGE")
-
           curl -X POST "${{ secrets.AUTO_LOGIC_APP_URL }}" \
             -H "Content-Type: application/json" \
-            -d "$JSON_PAYLOAD"
-
+            -d '{"failureMessage": "The deployment failed. Please check the logs for more details."}'
 
 
       # - name: Send Notification on Failure
