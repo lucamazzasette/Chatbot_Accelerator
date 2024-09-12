@@ -45,20 +45,29 @@ jobs:
         id: deploy
         run: |
           set -e
+          output_file=$(mktemp)
 
-           # Execute the deployment and redirect output and errors
+          # Execute the deployment and redirect output and errors
           az deployment sub create \
             --name autoDemo \
             --location eastus \
             --template-file infra/main.bicep \
-            --parameters environmentName=pslautomation2 location=eastus2
+            --parameters environmentName=pslautomation2 location=eastus2 \
+            &> "$output_file" || echo "Command failed, capturing output and error."
+
+          output=$(cat "$output_file")
+          echo "$output"
+
+          echo "output=$output" >> $GITHUB_ENV
+
+          rm "$output_file"
 
       - name: Send Notification on Failure
         if: failure()
         run: |
           curl -X POST "${{ secrets.AUTO_LOGIC_APP_URL }}" \
             -H "Content-Type: application/json" \
-            -d '{"failureMessage": "The deployment failed. Please check the logs for more details."}'
+            -d '{"failureMessage": "The deployment failed. Please find below more details. $output"}'
 
 
       # - name: Send Notification on Failure
