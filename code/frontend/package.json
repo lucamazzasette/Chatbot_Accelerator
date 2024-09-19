@@ -37,7 +37,7 @@
     "@types/testing-library__user-event": "^4.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest-environment-jsdom": "^29.7.0",
-    "msw": "2.2.2",
+    "msw": "^2.2.2",
     "ts-jest": "^29.2.5",
     "@types/jest": "^29.5.12",
     "ts-node": "^10.9.2",
