@@ -15,13 +15,13 @@ const config: Config.InitialOptions = {
     "\\.(css|less|scss|svg|png|jpg)$": "identity-obj-proxy",
   },
 
-  setupFilesAfterEnv: ["/src/test/setupTests.ts"],
+  setupFilesAfterEnv: ['<rootDir>/src/test/setupTests.ts'],
 
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
 
-  setupFiles: ["/jest.polyfills.js"],
+  setupFiles: ["<rootDir>/jest.polyfills.js"],
 };
 
 export default config;
