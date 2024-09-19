@@ -18,10 +18,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "types": [
-      "vite/client"
-    ]
+    "jsx": "react-jsx", 
+    "types": ["vite/client", "jest", "node"]
   },
   "include": [
     "src"
