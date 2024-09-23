@@ -6,7 +6,6 @@ const config: Config.InitialOptions = {
   preset: "ts-jest",
 
   testEnvironment: "jest-environment-jsdom",
-
   testEnvironmentOptions: {
     customExportConditions: [""],
   },
