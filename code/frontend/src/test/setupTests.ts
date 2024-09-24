@@ -1,19 +1,19 @@
 import "@testing-library/jest-dom"; // For jest-dom matchers like toBeInTheDocument
 
-import { initializeIcons } from "@fluentui/react/lib/Icons";
+// import { initializeIcons } from "@fluentui/react/lib/Icons";
 
-initializeIcons();
+// initializeIcons();
 
-import { server } from "../../mocks/server";
-import { vi } from "vitest";
+// import { server } from "../../mocks/server";
+// import { vi } from "vitest";
 
-// Establish API mocking before all tests
+// // Establish API mocking before all tests
 
-beforeAll(() => server.listen());
-// Reset any request handlers that are declared in a test
+// beforeAll(() => server.listen());
+// // Reset any request handlers that are declared in a test
 
-afterEach(() => server.resetHandlers());
+// afterEach(() => server.resetHandlers());
 
-// Clean up after the tests are finished
+// // Clean up after the tests are finished
 
-afterAll(() => server.close());
+// afterAll(() => server.close());

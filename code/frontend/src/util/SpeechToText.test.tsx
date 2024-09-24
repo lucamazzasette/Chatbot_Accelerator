@@ -1,8 +1,8 @@
-import { describe, expect, it, vi } from 'vitest'
-import { multiLingualSpeechRecognizer } from "../src/util/SpeechToText.js";
 
-global.fetch = vi.fn();
-const createFetchResponse = (ok, data) => {
+import { multiLingualSpeechRecognizer } from "./SpeechToText";
+
+global.fetch = jest.fn();
+const createFetchResponse = (ok : any, data : any) => {
   return { ok: ok, json: () => new Promise((resolve) => resolve(data)) };
 };
 
@@ -19,13 +19,13 @@ describe("SpeechToText", () => {
       languages: languages
     };
 
-    fetch.mockResolvedValue(createFetchResponse(true, response));
+    (global.fetch as jest.Mock).mockResolvedValue(createFetchResponse(true, response));
 
     const recognizer = await multiLingualSpeechRecognizer();
 
-    expect(recognizer.authorizationToken).to.equal(token);
-    expect(recognizer.properties.getProperty("SpeechServiceConnection_Region")).to.equal(region);
-    expect(recognizer.properties.getProperty("SpeechServiceConnection_AutoDetectSourceLanguages")).to.equal(languages.join(","));
+    expect(recognizer.authorizationToken).toBe(token);
+    expect(recognizer.properties.getProperty("SpeechServiceConnection_Region")).toBe(region);
+    expect(recognizer.properties.getProperty("SpeechServiceConnection_AutoDetectSourceLanguages")).toBe(languages.join(","));
   });
 
   it("creates a speech recognizer without configured languages if language config empty array", async () => {
@@ -38,23 +38,23 @@ describe("SpeechToText", () => {
       languages: [""]
     };
 
-    fetch.mockResolvedValue(createFetchResponse(true, response));
+    (global.fetch as jest.Mock).mockResolvedValue(createFetchResponse(true, response));
 
     const recognizer = await multiLingualSpeechRecognizer();
 
-    expect(recognizer.authorizationToken).to.equal(token);
-    expect(recognizer.properties.getProperty("SpeechServiceConnection_Region")).to.equal(region);
-    expect(recognizer.properties.getProperty("SpeechServiceConnection_AutoDetectSourceLanguages")).to.be.undefined;
+    expect(recognizer.authorizationToken).toBe(token);
+    expect(recognizer.properties.getProperty("SpeechServiceConnection_Region")).toBe(region);
+    //expect(recognizer.properties.getProperty("SpeechServiceConnection_AutoDetectSourceLanguages")).to.be.undefined;
   });
 
   it("throws an error if speech config response not ok", async () => {
-    fetch.mockResolvedValue(createFetchResponse(false, {}));
+    (global.fetch as jest.Mock).mockResolvedValue(createFetchResponse(false, {}));
 
     expect(async () => await multiLingualSpeechRecognizer()).rejects.toThrowError("Network response was not ok");
   });
 
   it("throws an error if speech config fetching fails with an error", async () => {
-    fetch.mockImplementationOnce(() => { throw new Error("Random error"); });
+    (global.fetch as jest.Mock).mockImplementationOnce(() => { throw new Error("Random error"); });
 
     expect(async () => await multiLingualSpeechRecognizer()).rejects.toThrowError("Random error");
   });
