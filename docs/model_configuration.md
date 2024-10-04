@@ -33,12 +33,11 @@ This document outlines the necessary steps and configurations required for setti
     - example: `10`
 
 ### EMBEDDINGS
-- `AZURE_OPENAI_EMBEDDING_MODEL`: The Azure OpenAI Model Deployment Name
-    - example: `my-text-embedding-ada-002`
-- `AZURE_OPENAI_EMBEDDING_MODEL_NAME`: The Azure OpenAI Model Name
-    - example: `text-embedding-ada-002`
-- `AZURE_OPENAI_EMBEDDING_MODEL_VERSION`: The Azure OpenAI Model Version
-    - example: `2`
+- `AZURE_OPENAI_EMBEDDING_MODEL_INFO`: The Azure OpenAI Model Deployment Name
+    - example: `{"model":"text-embedding-ada-002","modelName":"text-embedding-ada-002","modelVersion":"2"}`
+      - `model` - The name of your Azure OpenAI embeddings model deployment.
+      - `modelName` - The name of the embeddings model (can be found in Azure AI Studio).
+      - `modelVersion` - The version of the embeddings model to use (can be found in Azure AI Studio).
 - `AZURE_OPENAI_EMBEDDING_MODEL_CAPACITY`: The Tokens per Minute Rate Limit (thousands)
     - example: `30`
 - `AZURE_SEARCH_DIMENSIONS`: Azure OpenAI Embeddings dimensions. A full list of dimensions can be found [here](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models#embeddings-models).
@@ -65,9 +64,7 @@ This document outlines the necessary steps and configurations required for setti
 - The following environment variables are set for the GPT-4o and Text-Embeddings-3-Large models:
     - `AZURE_OPENAI_API_VERSION`: `2024-05-01-preview`
     - `AZURE_OPENAI_MODEL_INFO`: `{"model":"my-gpt-4o","modelName":"gpt-4o","modelVersion":"2024-05-13"}`
-    - `AZURE_OPENAI_EMBEDDING_MODEL`: `my-text-embedding-3-large`
-    - `AZURE_OPENAI_EMBEDDING_MODEL_NAME`: `text-embedding-3-large`
-    - `AZURE_OPENAI_EMBEDDING_MODEL_VERSION`: `1`
+    - `AZURE_OPENAI_EMBEDDING_MODEL_INFO`: `{"model":"my-text-embedding-3-large","modelName":"text-embedding-3-large","modelVersion":"1"}`
     - `AZURE_SEARCH_DIMENSIONS`: `3072`
     - `AZURE_MAX_TOKENS`: `4096`
 
