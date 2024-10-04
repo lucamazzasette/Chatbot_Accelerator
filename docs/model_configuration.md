@@ -14,12 +14,11 @@ This document outlines the necessary steps and configurations required for setti
 - You can access the Environment Variables section of the `LOCAL_DEPLOYMENT.md` file by clicking on this link: [Environment Variables section in LOCAL_DEPLOYMENT.md](LOCAL_DEPLOYMENT.md#environment-variables).
 
 ### LLM
-- `AZURE_OPENAI_MODEL`: The Azure OpenAI Model Deployment Name
-    - example: `my-gpt-35-turbo-16k`
-- `AZURE_OPENAI_MODEL_NAME`: The Azure OpenAI Model Name
-    - example: `gpt-35-turbo-16k`
-- `AZURE_OPENAI_MODEL_VERSION`: The Azure OpenAI Model Version
-    - example: `0613`
+- `AZURE_OPENAI_MODEL_INFO`: The Azure OpenAI Model Info
+  - example: `{"model":"gpt-35-turbo-16k","modelName":"gpt-35-turbo-16k","modelVersion":"0613"}`
+    - `model` - The Azure OpenAI Model Deployment Name
+    - `modelName` - The Azure OpenAI Model Name
+    - `modelVersion` - The Azure OpenAI Model Version
 - `AZURE_OPENAI_MODEL_CAPACITY`: The Tokens per Minute Rate Limit (thousands)
     - example: `30`
 
@@ -65,9 +64,7 @@ This document outlines the necessary steps and configurations required for setti
 ## GPT-4o & Text-Embeddings-3-Large
 - The following environment variables are set for the GPT-4o and Text-Embeddings-3-Large models:
     - `AZURE_OPENAI_API_VERSION`: `2024-05-01-preview`
-    - `AZURE_OPENAI_MODEL`: `my-gpt-4o`
-    - `AZURE_OPENAI_MODEL_NAME`: `gpt-4o`
-    - `AZURE_OPENAI_MODEL_VERSION`: `2024-05-13`
+    - `AZURE_OPENAI_MODEL_INFO`: `{"model":"my-gpt-4o","modelName":"gpt-4o","modelVersion":"2024-05-13"}`
     - `AZURE_OPENAI_EMBEDDING_MODEL`: `my-text-embedding-3-large`
     - `AZURE_OPENAI_EMBEDDING_MODEL_NAME`: `text-embedding-3-large`
     - `AZURE_OPENAI_EMBEDDING_MODEL_VERSION`: `1`
