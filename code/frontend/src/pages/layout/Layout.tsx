@@ -89,7 +89,7 @@ const Layout = ({ children,toggleSpinner, ...props }: LayoutProps) => {
               alt="Chat with your data"
             />
             <Link to="/" className={styles.headerTitleContainer}>
-              <h3 className={styles.headerTitle}>Chat with your data</h3>
+              <h3 className={styles.headerTitle}>AIKO</h3>
             </Link>
             <Stack horizontal className={styles.layoutRightButtons}>
               {!showAuthMessage && showHistoryBtn && (

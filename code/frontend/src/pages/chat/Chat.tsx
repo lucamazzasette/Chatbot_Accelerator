@@ -605,8 +605,8 @@ const Chat = () => {
                 ) : assistantType === "default" ? (
                   <>
                     <h1 className={styles.chatEmptyStateTitle}>
-                      Chat with your
-                      <span className={styles.dataText}>&nbsp;Data</span>
+                      Chat with 
+                      <span className={styles.dataText}>&nbsp;AIKO</span>
                     </h1>
                     <h2 className={styles.chatEmptyStateSubtitle}>
                       This chatbot is configured to answer your questions
